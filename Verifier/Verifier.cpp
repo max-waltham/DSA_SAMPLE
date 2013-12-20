@@ -52,32 +52,32 @@ int Verifier::verify(std::map<char, std::string> map, std::string hira_bun)
 void Verifier::generateV(mp_int* v, mp_int* y, mp_int* p, mp_int* q,
                          mp_int* g, mp_int* w, mp_int* r, mp_int* z)
 {
-   mp_int temp, u1, u2, u2_2, t1, t2, t3, t4;
-   mp_init(&temp);
+   mp_int  u1, u2, u3, u4, t1, t2, t3, t4;
    mp_init(&u1);
    mp_init(&u2);
-   mp_init(&u2_2);
+   mp_init(&u3);
+   mp_init(&u4);
    mp_init(&t1);
    mp_init(&t2);
    mp_init(&t3);
    mp_init(&t4);
 
-   mp_mul(z, w, &temp);
-   mp_mod(&temp, q, &u1);   // remainder‚Ì‘ã‚í‚è
-   mp_mul(r, w, &u2_2);
-   mp_mod(&u2_2, q, &u2);   // remainder‚Ì‘ã‚í‚è
+   mp_mul(z, w, &u1);
+   mp_mod(&u1, q, &u2);   // remainder‚Ì‘ã‚í‚è
+   mp_mul(r, w, &u3);
+   mp_mod(&u3, q, &u4);   // remainder‚Ì‘ã‚í‚è
 
-   mp_exptmod(g, &u1, p, &t1);
-   mp_exptmod(y, &u2, p, &t2);
+   mp_exptmod(g, &u2, p, &t1);
+   mp_exptmod(y, &u4, p, &t2);
 
    mp_mul(&t1, &t2, &t3);
    mp_mod(&t3, p, &t4);   // remainder‚Ì‘ã‚í‚è
    mp_mod(&t4, q, v);     // remainder‚Ì‘ã‚í‚è
 
-   mp_clear(&temp);
    mp_clear(&u1);
    mp_clear(&u2);
-   mp_clear(&u2_2);
+   mp_clear(&u3);
+   mp_clear(&u4);
    mp_clear(&t1);
    mp_clear(&t2);
    mp_clear(&t3);
