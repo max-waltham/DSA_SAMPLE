@@ -95,6 +95,9 @@
     <ProjectReference Include="..\libtommath-master\libtommath.vcxproj">
       <Project>{218a8810-cd46-7f67-c11a-d025271cf6b9}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\SHA1\SHA1.vcxproj">
+      <Project>{38095d19-68e8-4691-adc4-973d8e9ec900}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Verifier\Verifier.vcxproj">
       <Project>{069a6550-00cc-4892-bf09-82259c8fca97}</Project>
     </ProjectReference>
