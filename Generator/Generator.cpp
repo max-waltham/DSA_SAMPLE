@@ -15,6 +15,14 @@ Generator::~Generator(void)
 
 std::map<char, std::string> Generator::generateSign(std::string hira_bun)
 {   
+   //平文のHash値を求める
+   mp_int z;
+   mp_init(&z);
+   char buf[SHA1HashSize * 2 + 1];
+   SHA1GenerateHash(hira_bun.c_str(), buf);
+   mp_read_radix(&z, buf, 16);
+
+   //DSAの元や鍵を読込む
    mp_int p, q, g, y, x;
    mp_init(&p);
    mp_init(&q);
@@ -27,18 +35,12 @@ std::map<char, std::string> Generator::generateSign(std::string hira_bun)
    mp_read_radix(&g, DSA_G, 16);
    mp_read_radix(&x, DSA_X, 16);
    mp_read_radix(&y, DSA_Y, 16);
-   
-   //平文のHash値を求める
-   mp_int z;
-   mp_init(&z);
-   char buf[SHA1HashSize * 2 + 1];
-   SHA1GenerateHash(hira_bun.c_str(), buf);
-   mp_read_radix(&z, buf, 16);
 
-   /*ｒ、ｓを求める (kは0以外のランダムな数字）
-   r = (g^k mod p) mod q とします
-   s = k^(-1) (z + x r) mod q とします*/
-
+   /*ｒ、ｓを求める 
+      r = (g^k mod p) mod q 
+      s = k^(-1) (z + x r) mod q 
+      (kは0以外のランダムな数字）
+      */
    mp_int r, s, k, zero;
    mp_init(&r);
    mp_init(&s);
@@ -89,6 +91,16 @@ std::map<char, std::string> Generator::generateSign(std::string hira_bun)
 
    return map;
 }
+
+
+
+
+
+
+
+
+
+
 void Generator::generateKey()
 {
    mp_int p, q, g, y, x;
