@@ -23,18 +23,16 @@ std::map<char, std::string> Generator::generateSign(std::string hira_bun)
    mp_read_radix(&z, buf, 16);
 
    //DSAの元や鍵を読込む
-   mp_int p, q, g, y, x;
+   mp_int p, q, g, x;
    mp_init(&p);
    mp_init(&q);
    mp_init(&g);
-   mp_init(&y);
    mp_init(&x);
 
    mp_read_radix(&p, DSA_P, 16);
    mp_read_radix(&q, DSA_Q, 16);
    mp_read_radix(&g, DSA_G, 16);
    mp_read_radix(&x, DSA_X, 16);
-   mp_read_radix(&y, DSA_Y, 16);
 
    /*ｒ、ｓを求める 
       r = (g^k mod p) mod q 
@@ -82,24 +80,14 @@ std::map<char, std::string> Generator::generateSign(std::string hira_bun)
    map['p'] = DSA_P;
    map['q'] = DSA_Q;
    map['g'] = DSA_G;
+   map['y'] = DSA_Y;
    mp_tohex(&r, anschar);
    map['r'] = anschar;
    mp_tohex(&s, anschar);
    map['s'] = anschar;
-   mp_tohex(&y, anschar);
-   map['y'] = anschar;
 
    return map;
 }
-
-
-
-
-
-
-
-
-
 
 void Generator::generateKey()
 {
@@ -120,7 +108,7 @@ void Generator::generateKey()
    //秘密鍵xを選ぶ : qより小さければ良い(自由に決める）
    char x_str[] = "1234567890abcdef1234567890abcdef";
    mp_read_radix(&x, x_str, 16);
-
+   
    //y = (g^x) mod p
    mp_exptmod(&g, &x, &p, &y);
 
